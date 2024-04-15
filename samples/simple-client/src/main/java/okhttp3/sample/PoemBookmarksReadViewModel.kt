@@ -58,12 +58,11 @@ class PoemBookmarksReadViewModel {
   """.trimIndent()
   fun addArticle() {
 
-//    val formBody = FormBody.Builder()
-//      .add("userId", "1")
-//      .add("title", "article 2")
-//      .add("body", "body article")
-//      .build()
-//
+    val formBody = FormBody.Builder()
+      .add("userId", "1")
+      .add("title", "article 2")
+      .add("body", "body article")
+      .build()
 //    println(formBody)
 
     val client = OkHttpClient()
@@ -73,7 +72,7 @@ class PoemBookmarksReadViewModel {
 
     val request = Request.Builder()
       .url(url)
-      .post(requestBody)
+      .post(formBody)
       .build()
 
     val response = client.newCall(request).execute()
