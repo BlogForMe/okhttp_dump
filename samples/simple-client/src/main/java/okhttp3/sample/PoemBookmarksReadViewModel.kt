@@ -1,17 +1,19 @@
 package okhttp3.sample
 
+import okhttp3.Call
+import okhttp3.Callback
 import okhttp3.FormBody
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
+import okhttp3.Response
+import okio.IOException
 
 
 fun main() {
   val viewModel = PoemBookmarksReadViewModel()
-//  viewModel.getArticle()
+  viewModel.getArticle()
   viewModel.addArticle()
 }
 
@@ -20,32 +22,31 @@ class PoemBookmarksReadViewModel {
 
 
   fun getArticle() {
-//    Retrofit.Builder().baseUrl(jsonplaceURL).build().create(IApiStores::class.java).getArticle(2)
-//      ?.enqueue(
-//        object : Callback<ResponseBody?> {
-//          override fun onResponse(
-//            call: Call<ResponseBody?>,
-//            response: Response<ResponseBody?>,
-//          ) {
-//            val body = response.body()?.string()
-//
-//            Log.i("PoemBookmarksReadViewModel", "onResponse: $body")
-//          }
-//
-//          override fun onFailure(call: Call<ResponseBody?>, t: Throwable) {
-//          }
-//        },
-//      )
-
     val request: Request = Request.Builder()
       .url("https://jsonplaceholder.typicode.com/posts/2")
       .build()
 
-    client.newCall(request).execute().use { response ->
-      println(response.body.string())
-    }
+//    client.newCall(request).execute().use { response ->
+//      println(response.body.string())
+//    }
 
+    client.newCall(request).enqueue(object : Callback {
+      override fun onFailure(call: Call, e: IOException) {
+      }
+
+      override fun onResponse(call: Call, response: Response) {
+        if (response.isSuccessful) {
+          // Successful request
+          println("Response: ${response.body.string()}")
+        } else {
+          // Request failed
+          println("Request failed: ${response.code}")
+        }
+      }
+    })
   }
+
+//      println(response.body.string())
 
 
   val json = """
@@ -56,6 +57,7 @@ class PoemBookmarksReadViewModel {
     "id": 101
 }
   """.trimIndent()
+
   fun addArticle() {
 
     val formBody = FormBody.Builder()
@@ -75,30 +77,26 @@ class PoemBookmarksReadViewModel {
       .post(formBody)
       .build()
 
-    val response = client.newCall(request).execute()
-    val responseBody = response.body.string()
+    val response = client.newCall(request).enqueue(
+      object : Callback {
+        override fun onFailure(call: Call, e: IOException) {
+        }
 
-    // Handle the response
-    if (response.isSuccessful) {
-      // Successful request
-      println("Response: $responseBody")
-    } else {
-      // Request failed
-      println("Request failed: ${response.code}")
-    }
+        override fun onResponse(call: Call, response: Response) {
+          if (response.isSuccessful) {
+            // Successful request
+            println("Response: ${response.body.string()}")
+          } else {
+            // Request failed
+            println("Request failed: ${response.code}")
+          }
+        }
+
+      }
+    )
 
   }
-
 }
 
 
-interface IApiStores {
-
-//  @GET("posts/{articleId}")
-//  fun getArticle(@retrofit2.http.Path("articleId") it: Int): Call<ResponseBody?>?
-//
-//
-//  @POST("posts")
-//  fun addArticle(@retrofit2.http.Body requestBody: RequestBody?): Call<ResponseBody?>?
-}
 
