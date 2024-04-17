@@ -14,12 +14,12 @@ import okio.IOException
 fun main() {
   val viewModel = PoemBookmarksReadViewModel()
   viewModel.getArticle()
-  viewModel.addArticle()
+//  viewModel.addArticle()
 }
 
 class PoemBookmarksReadViewModel {
-  val client = OkHttpClient()
 
+  val client = OkHttpClient()
 
   fun getArticle() {
     val request: Request = Request.Builder()
@@ -59,7 +59,6 @@ class PoemBookmarksReadViewModel {
   """.trimIndent()
 
   fun addArticle() {
-
     val formBody = FormBody.Builder()
       .add("userId", "1")
       .add("title", "article 2")
@@ -67,7 +66,6 @@ class PoemBookmarksReadViewModel {
       .build()
 //    println(formBody)
 
-    val client = OkHttpClient()
     val url = "https://jsonplaceholder.typicode.com/posts"
     val mediaType = "application/json".toMediaTypeOrNull()
     val requestBody = RequestBody.create(mediaType, json)

@@ -480,6 +480,7 @@ class RealCall(
       private set
 
     fun reuseCallsPerHostFrom(other: AsyncCall) {
+      println("AsyncCall others ${other.callsPerHost}")
       this.callsPerHost = other.callsPerHost
     }
 
@@ -520,6 +521,8 @@ class RealCall(
     }
 
     override fun run() {
+//      println("RealCall run: ${Thread.currentThread().name}")
+
       threadName("OkHttp ${redactedUrl()}") {
         var signalledCallback = false
         timeout.enter()

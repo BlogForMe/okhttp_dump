@@ -67,7 +67,7 @@ internal fun threadFactory(
   daemon: Boolean,
 ): ThreadFactory =
   ThreadFactory { runnable ->
-    Thread(runnable, name).apply {
+    Thread(runnable).apply {
       isDaemon = daemon
     }
   }

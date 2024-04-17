@@ -13,6 +13,10 @@ org-jetbrains-coroutines = "1.8.0"
 org-jetbrains-kotlin = "1.9.23"
 org-junit-jupiter = "5.10.2"
 testcontainers = "1.19.7"
+appcompat = "1.6.1"
+material = "1.11.0"
+activity = "1.8.0"
+constraintlayout = "2.1.4"
 
 [libraries]
 amazonCorretto = "software.amazon.cryptools:AmazonCorrettoCryptoProvider:2.3.3"
@@ -95,3 +99,7 @@ squareup-okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem
 squareup-okio-nodefilesystem = { module = "com.squareup.okio:okio-nodefilesystem", version.ref = "com-squareup-okio" }
 testcontainers = { module = "org.testcontainers:testcontainers", version.ref = "testcontainers" }
 testcontainers-junit5 = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }

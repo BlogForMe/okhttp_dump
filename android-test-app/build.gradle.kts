@@ -17,6 +17,9 @@ android {
     targetSdk = 34
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
+  buildFeatures {
+    viewBinding = true
+  }
 
   compileOptions {
     targetCompatibility(JavaVersion.VERSION_11)
@@ -43,6 +46,10 @@ dependencies {
   implementation(projects.okhttp)
   implementation(projects.okhttpAndroid)
   implementation(libs.androidx.activity)
+  implementation(libs.androidx.appcompat)
+  implementation(libs.material)
+  implementation(libs.activity)
+  implementation(libs.androidx.constraintlayout)
 
   androidTestImplementation(libs.androidx.junit)
   androidTestImplementation(libs.androidx.espresso.core)
