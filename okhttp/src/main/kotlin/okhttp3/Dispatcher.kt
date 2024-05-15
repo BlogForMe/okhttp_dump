@@ -15,7 +15,6 @@
  */
 package okhttp3
 
-import android.util.Log
 import java.util.ArrayDeque
 import java.util.Collections
 import java.util.Deque
@@ -44,8 +43,7 @@ class Dispatcher() {
    * If more than [maxRequests] requests are in flight when this is invoked, those requests will
    * remain in flight.
    */
-  @get:Synchronized
-  var maxRequests = 64
+  @get:Synchronized var maxRequests = 64
     set(maxRequests) {
       require(maxRequests >= 1) { "max < 1: $maxRequests" }
       synchronized(this) {
@@ -64,8 +62,7 @@ class Dispatcher() {
    *
    * WebSocket connections to hosts **do not** count against this limit.
    */
-  @get:Synchronized
-  var maxRequestsPerHost = 5
+  @get:Synchronized var maxRequestsPerHost = 5
     set(maxRequestsPerHost) {
       require(maxRequestsPerHost >= 1) { "max < 1: $maxRequestsPerHost" }
       synchronized(this) {
@@ -150,8 +147,7 @@ class Dispatcher() {
    * Cancel all calls currently enqueued or executing. Includes calls executed both
    * [synchronously][Call.execute] and [asynchronously][Call.enqueue].
    */
-  @Synchronized
-  fun cancelAll() {
+  @Synchronized fun cancelAll() {
     for (call in readyAsyncCalls) {
       call.call.cancel()
     }
@@ -177,15 +173,10 @@ class Dispatcher() {
     val isRunning: Boolean
     synchronized(this) {
       val i = readyAsyncCalls.iterator()
-
       while (i.hasNext()) {
-//        println("promoteAndExecute readyAsyncCalls ${readyAsyncCalls.size}" )
         val asyncCall = i.next()
-        if (runningAsyncCalls.size >= this.maxRequests){
-          println("promoteAndExecute >= maxRequests" )
-          break
-        } // Max capacity.
-        println("promoteAndExecute callsPerHost  ${ asyncCall.host}  ${ asyncCall.callsPerHost.get()}")
+
+        if (runningAsyncCalls.size >= this.maxRequests) break // Max capacity.
         if (asyncCall.callsPerHost.get() >= this.maxRequestsPerHost) continue // Host max capacity.
 
         i.remove()
@@ -214,7 +205,6 @@ class Dispatcher() {
     } else {
       for (i in 0 until executableCalls.size) {
         val asyncCall = executableCalls[i]
-//        println("Dispatcher promoteAndExecute: ${Thread.currentThread().name}")
         asyncCall.executeOn(executorService)
       }
     }
@@ -223,8 +213,7 @@ class Dispatcher() {
   }
 
   /** Used by [Call.execute] to signal it is in-flight. */
-  @Synchronized
-  internal fun executed(call: RealCall) {
+  @Synchronized internal fun executed(call: RealCall) {
     runningSyncCalls.add(call)
   }
 
@@ -268,11 +257,9 @@ class Dispatcher() {
     return Collections.unmodifiableList(runningSyncCalls + runningAsyncCalls.map { it.call })
   }
 
-  @Synchronized
-  fun queuedCallsCount(): Int = readyAsyncCalls.size
+  @Synchronized fun queuedCallsCount(): Int = readyAsyncCalls.size
 
-  @Synchronized
-  fun runningCallsCount(): Int = runningAsyncCalls.size + runningSyncCalls.size
+  @Synchronized fun runningCallsCount(): Int = runningAsyncCalls.size + runningSyncCalls.size
 
   @JvmName("-deprecated_executorService")
   @Deprecated(

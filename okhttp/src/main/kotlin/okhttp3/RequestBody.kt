@@ -143,7 +143,7 @@ abstract class RequestBody {
       contentType: MediaType? = null,
       offset: Int = 0,
       byteCount: Int = size,
-    ): RequestBody = this.commonToRequestBody(contentType, offset, byteCount)
+    ): RequestBody = commonToRequestBody(contentType, offset, byteCount)
 
     /** Returns a new request body that transmits the content of this. */
     @JvmStatic
