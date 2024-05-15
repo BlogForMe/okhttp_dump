@@ -246,14 +246,12 @@ class Dispatcher() {
   }
 
   /** Returns a snapshot of the calls currently awaiting execution. */
-  @Synchronized
-  fun queuedCalls(): List<Call> {
+  @Synchronized fun queuedCalls(): List<Call> {
     return Collections.unmodifiableList(readyAsyncCalls.map { it.call })
   }
 
   /** Returns a snapshot of the calls currently being executed. */
-  @Synchronized
-  fun runningCalls(): List<Call> {
+  @Synchronized fun runningCalls(): List<Call> {
     return Collections.unmodifiableList(runningSyncCalls + runningAsyncCalls.map { it.call })
   }
 
