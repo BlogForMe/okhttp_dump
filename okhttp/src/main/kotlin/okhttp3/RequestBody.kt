@@ -109,7 +109,7 @@ abstract class RequestBody {
     @JvmName("create")
     fun String.toRequestBody(contentType: MediaType? = null): RequestBody {
       val (charset, finalContentType) = contentType.chooseCharset()
-      val bytes = toByteArray(charset)
+      val bytes = this.toByteArray(charset)
       return bytes.toRequestBody(finalContentType, 0, bytes.size)
     }
 
@@ -143,7 +143,7 @@ abstract class RequestBody {
       contentType: MediaType? = null,
       offset: Int = 0,
       byteCount: Int = size,
-    ): RequestBody = commonToRequestBody(contentType, offset, byteCount)
+    ): RequestBody = this.commonToRequestBody(contentType, offset, byteCount)
 
     /** Returns a new request body that transmits the content of this. */
     @JvmStatic

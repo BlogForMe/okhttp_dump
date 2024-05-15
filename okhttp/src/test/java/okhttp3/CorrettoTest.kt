@@ -72,4 +72,6 @@ class CorrettoTest {
     assertThat(PlatformRule.isCorrettoSupported).isTrue()
     assertThat(PlatformRule.isCorrettoInstalled).isTrue()
   }
+
+
 }

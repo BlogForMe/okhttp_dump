@@ -15,10 +15,4 @@
     android:text="test cache" />
 
 
-  <Button
-    android:id="@+id/bt_add_article"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="add article" />
-
 </LinearLayout>

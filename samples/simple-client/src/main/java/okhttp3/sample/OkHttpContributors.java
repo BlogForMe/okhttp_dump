@@ -58,6 +58,8 @@ public class OkHttpContributors {
 
       @Override
       public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+        String name = Thread.currentThread().getName();
+        System.out.println("response "+ name);
       }
     };
 
@@ -66,9 +68,9 @@ public class OkHttpContributors {
     Request request1 = new Request.Builder()
       .url("https://www.unicode.org/reports/tr46/#IDNA_Mapping_Table")
       .build();
-    for (int i = 0; i < 10; i++) {
+    //for (int i = 0; i < 10; i++) {
       client.newCall(request1).enqueue(callback);
-    }
+    //}
   }
 
   private OkHttpContributors() {

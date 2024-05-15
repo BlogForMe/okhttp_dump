@@ -105,6 +105,7 @@ class CallServerInterceptor(private val forWebSocket: Boolean) : Interceptor {
           .build()
       var code = response.code
 
+      println("response1 ${response.body.string()}")
       if (shouldIgnoreAndWaitForRealResponse(code, exchange)) {
         responseBuilder = exchange.readResponseHeaders(expectContinue = false)!!
         if (invokeStartEvent) {
@@ -118,19 +119,26 @@ class CallServerInterceptor(private val forWebSocket: Boolean) : Interceptor {
             .receivedResponseAtMillis(System.currentTimeMillis())
             .build()
         code = response.code
+        println("response1 ${response.body.string()}")
       }
 
       exchange.responseHeadersEnd(response)
+      println("response11 ${response.body.string()}")
 
       response =
         if (forWebSocket && code == 101) {
           // Connection is upgrading, but we need to ensure interceptors see a non-null response body.
           response.stripBody()
         } else {
+          println("response3 ${response.body.string()}")
+
           response.newBuilder()
             .body(exchange.openResponseBody(response))
             .build()
         }
+
+      println("response4 ${response.body.string()}")
+
       if ("close".equals(response.request.header("Connection"), ignoreCase = true) ||
         "close".equals(response.header("Connection"), ignoreCase = true)
       ) {

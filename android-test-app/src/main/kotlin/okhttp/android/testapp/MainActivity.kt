@@ -16,7 +16,12 @@
 package okhttp.android.testapp
 
 import android.os.Bundle
+import android.os.Looper
+import android.util.Log
 import androidx.activity.ComponentActivity
+import java.util.concurrent.Executors
+import okhttp.android.testapp.databinding.ActivityMainBinding
+import okhttp.android.testapp.databinding.ActivityOkhttpBinding
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -26,14 +31,28 @@ import okhttp3.Response
 import okio.IOException
 
 class MainActivity : ComponentActivity() {
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    val binding = ActivityMainBinding.inflate(layoutInflater)
+    setContentView(binding.root)
 
+    val request = OkHttpRequest()
+    binding.btTestCache.setOnClickListener {
+      Executors.newCachedThreadPool().submit {
+        request.testCache(this)
+      }
+    }
+  }
+
+
+  fun originRequest() {
     val client = OkHttpClient()
 
-    val url = "https://github.com/square/okhttp".toHttpUrl()
+    val url = "https://api.github.com/repos/square/okhttp/contributors".toHttpUrl()
     println(url.topPrivateDomain())
 
+    Log.d("MainActivity", "onCreate: ${Thread.currentThread().name}")
     client.newCall(Request(url)).enqueue(
       object : Callback {
         override fun onFailure(
@@ -47,11 +66,15 @@ class MainActivity : ComponentActivity() {
           call: Call,
           response: Response,
         ) {
-          println("response: ${response.code}")
-          response.close()
-        }
-      },
+//          println("response: ${response.code}")
+          Log.d("MainActivity", "onResponse: ${Thread.currentThread().name}")
+          Log.d("MainActivity", "response: ${response.body.string()}")
 
+
+//          response.close()
+        }
+      }
     )
   }
+
 }
