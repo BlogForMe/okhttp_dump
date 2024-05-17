@@ -89,6 +89,12 @@ class OkHttpRequest {
       val client = OkHttpClient.Builder()
         .sslSocketFactory(createInsecureSslSocketFactory(), createInsecureTrustManager())
         .hostnameVerifier { hostname, session -> true }
+        .cache(
+          Cache(
+            directory = context.cacheDir,
+            maxSize = 10L * 1024L * 1024L // 10 MiB
+          )
+        )
         .build()
 
 //      val formBody = FormBody.Builder().add("id", "1").build()
@@ -98,12 +104,12 @@ class OkHttpRequest {
 
       val request = Request.Builder()
         .url("http://172.34.83.1:8080/poi/detail/post")
+//        .url("http://10.0.2.2:8080/poi/detail/post")  // run this with emulator
         .post(requestBody)
         .build()
 
       val response1Body = client.newCall(request).execute().use {
-//        if (!it.isSuccessful) throw java.io.IOException("Unexpected code $it")
-
+        if (!it.isSuccessful) throw java.io.IOException("Unexpected code $it")
         println("Response 1 response:          $it")
         println("Response 1 cache response:    ${it.cacheResponse}")
         println("Response 1 network response:  ${it.networkResponse}")
