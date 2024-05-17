@@ -43,6 +43,10 @@ class MainActivity : ComponentActivity() {
         request.testCache(this)
       }
     }
+
+    binding.btPostCache.setOnClickListener {
+      request.postOkhttpCache(this)
+    }
   }
 
 

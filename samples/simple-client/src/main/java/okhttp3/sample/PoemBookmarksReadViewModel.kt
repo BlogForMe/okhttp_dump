@@ -1,24 +1,32 @@
 package okhttp3.sample
 
+import com.google.gson.Gson
+import java.util.concurrent.Executors
 import javax.net.ssl.SSLContext
 import javax.net.ssl.X509TrustManager
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.FormBody
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import okio.IOException
 
 
+@Suppress("SuspiciousIndentation")
 fun main() {
   val viewModel = PoemBookmarksReadViewModel()
 //  viewModel.getArticle()
 //  viewModel.addArticle()
 
 //  Executors.newCachedThreadPool().execute {
-    viewModel.getDetail()
+//  viewModel.getDetail() // 可以跑通,关闭代理
+
+  viewModel.postOkhttpCache()
 }
 
 class PoemBookmarksReadViewModel {
@@ -49,9 +57,6 @@ class PoemBookmarksReadViewModel {
       }
     })
   }
-
-
-
 
 
   val json = """
@@ -123,18 +128,63 @@ class PoemBookmarksReadViewModel {
 
 
   fun getDetail() {
-    val request: Request = Request.Builder()
-      .url("http://172.34.83.1:8080/poi/detail/1")
-      .build()
+    Executors.newCachedThreadPool().submit {
+      val request: Request = Request.Builder()
+        .url("http://172.34.83.1:8080/poi/detail/1")
+        .build()
 
-    val client = OkHttpClient.Builder()
-      .sslSocketFactory(createInsecureSslSocketFactory(), createInsecureTrustManager())
-      .hostnameVerifier { hostname, session -> true }
-      .build()
+      val client = OkHttpClient.Builder()
+        .sslSocketFactory(createInsecureSslSocketFactory(), createInsecureTrustManager())
+        .hostnameVerifier { hostname, session -> true }
+        .build()
 
-    val response = client.newCall(request).execute()
-    val string = response.body.string()
-    println(string)
+      val response = client.newCall(request).execute()
+      val string = response.body.string()
+      println(string)
+    }
+  }
+
+
+  fun postOkhttpCache() {
+    Thread {
+      val client = OkHttpClient.Builder()
+        .sslSocketFactory(createInsecureSslSocketFactory(), createInsecureTrustManager())
+        .hostnameVerifier { hostname, session -> true }
+        .build()
+
+//      val formBody = FormBody.Builder().add("id", "1").build()
+      val myData ="{\"id\":\"1\",\"name\":\"john\"}"
+      val mediaType = "application/json; charset=utf-8".toMediaType()
+      val requestBody = myData.toRequestBody(mediaType)
+
+      val request = Request.Builder()
+        .url("http://172.34.83.1:8080/poi/detail/post")
+        .post(requestBody)
+        .build()
+
+      val response1Body = client.newCall(request).execute().use {
+//        if (!it.isSuccessful) throw java.io.IOException("Unexpected code $it")
+
+        println("Response 1 response:          $it")
+        println("Response 1 cache response:    ${it.cacheResponse}")
+        println("Response 1 network response:  ${it.networkResponse}")
+        return@use it.body.string()
+      }
+      println("Response 1 response:          $response1Body")
+
+
+//      val response2Body = client.newCall(request).execute().use {
+//        if (!it.isSuccessful) throw IOException("Unexpected code $it")
+//
+//        println("Response 2 response:          $it")
+//        println("Response 2 cache response:    ${it.cacheResponse}")
+//        println("Response 2 network response:  ${it.networkResponse}")
+//        return@use it.body.string()
+//      }
+//      println("Response 2 response:          $response2Body")
+//
+//      println("Response 2 equals Response 1? " + (response1Body == response2Body))
+    }.start()
 
   }
 }

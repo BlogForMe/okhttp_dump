@@ -55,4 +55,6 @@ dependencies {
   androidTestImplementation(libs.androidx.espresso.core)
   androidTestImplementation(libs.androidx.test.runner)
   androidTestImplementation(libs.assertk)
+  implementation(libs.gson)
+
 }
