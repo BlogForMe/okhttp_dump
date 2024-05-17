@@ -1,6 +1,5 @@
 package okhttp3.sample
 
-import com.google.gson.Gson
 import java.util.concurrent.Executors
 import javax.net.ssl.SSLContext
 import javax.net.ssl.X509TrustManager
@@ -11,7 +10,6 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import okio.IOException

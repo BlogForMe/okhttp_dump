@@ -89,12 +89,6 @@ class OkHttpRequest {
       val client = OkHttpClient.Builder()
         .sslSocketFactory(createInsecureSslSocketFactory(), createInsecureTrustManager())
         .hostnameVerifier { hostname, session -> true }
-        .cache(
-          Cache(
-            directory = context.cacheDir,
-            maxSize = 10L * 1024L * 1024L // 10 MiB
-          )
-        )
         .build()
 
 //      val formBody = FormBody.Builder().add("id", "1").build()
