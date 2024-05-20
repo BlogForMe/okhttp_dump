@@ -16,12 +16,10 @@
 package okhttp.android.testapp
 
 import android.os.Bundle
-import android.os.Looper
 import android.util.Log
 import androidx.activity.ComponentActivity
 import java.util.concurrent.Executors
 import okhttp.android.testapp.databinding.ActivityMainBinding
-import okhttp.android.testapp.databinding.ActivityOkhttpBinding
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -40,12 +38,16 @@ class MainActivity : ComponentActivity() {
     val request = OkHttpRequest()
     binding.btTestCache.setOnClickListener {
       Executors.newCachedThreadPool().submit {
-        request.testCache(this)
+        request.testOfficeCache(this)
       }
     }
 
     binding.btPostCache.setOnClickListener {
       request.postOkhttpCache(this)
+    }
+
+    binding.btGetCache.setOnClickListener {
+      request.testGetCache(this)
     }
   }
 
