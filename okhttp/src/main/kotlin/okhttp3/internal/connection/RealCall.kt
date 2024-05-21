@@ -273,6 +273,7 @@ class RealCall(
 
     val exchangeFinder = this.exchangeFinder!!
     val connection = exchangeFinder.find()
+    println("RealCall $connection  hashCode  ${connection.hashCode()}")
     val codec = connection.newCodec(client, chain)
     val result = Exchange(this, eventListener, exchangeFinder, codec)
     this.interceptorScopedExchange = result
@@ -329,7 +330,7 @@ class RealCall(
     if (callDone) {
       return callDone(e)
     }
-
+    //
     return e
   }
 
