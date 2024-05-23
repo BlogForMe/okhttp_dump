@@ -175,7 +175,7 @@ class Dispatcher() {
       val i = readyAsyncCalls.iterator()
       while (i.hasNext()) {
         val asyncCall = i.next()
-
+        println("runningAsyncCalls ${runningAsyncCalls.size}")
         if (runningAsyncCalls.size >= this.maxRequests) break // Max capacity.
         if (asyncCall.callsPerHost.get() >= this.maxRequestsPerHost) continue // Host max capacity.
 

@@ -29,6 +29,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+
 import org.jetbrains.annotations.NotNull;
 
 public class OkHttpContributors {
@@ -42,8 +43,12 @@ public class OkHttpContributors {
     int contributions;
   }
 
+  /**
+   * @param args
+   * @throws Exception
+   */
   public static void main(String... args) throws Exception {
-    OkHttpClient client = new OkHttpClient();
+    OkHttpClient client = new OkHttpClient.Builder().addInterceptor(null).addNetworkInterceptor(null).build();
 
     // Create request for remote resource.
     Request request = new Request.Builder()
@@ -59,21 +64,25 @@ public class OkHttpContributors {
       @Override
       public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
         String name = Thread.currentThread().getName();
-        System.out.println("response "+ name);
+        System.out.println("response " + name);
       }
     };
 
-    client.newCall(request).enqueue(callback);
+    for (int i = 0; i < 20; i++) {
+      client.newCall(request).enqueue(callback);
+    }
 
-    Request request1 = new Request.Builder()
-      .url("https://www.unicode.org/reports/tr46/#IDNA_Mapping_Table")
-      .build();
+//    Request request1 = new Request.Builder()
+//      .url("https://www.unicode.org/reports/tr46/#IDNA_Mapping_Table")
+//      .build();
     //for (int i = 0; i < 10; i++) {
-      client.newCall(request1).enqueue(callback);
+//      client.newCall(request1).enqueue(callback);
     //}
   }
 
   private OkHttpContributors() {
     // No instances.
   }
+
+
 }
