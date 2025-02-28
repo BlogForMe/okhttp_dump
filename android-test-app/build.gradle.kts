@@ -44,7 +44,6 @@ android {
 dependencies {
   implementation(libs.playservices.safetynet)
   implementation(projects.okhttp)
-  implementation(projects.okhttpAndroid)
   implementation(libs.androidx.activity)
   implementation(libs.androidx.appcompat)
   implementation(libs.material)
